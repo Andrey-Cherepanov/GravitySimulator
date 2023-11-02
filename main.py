@@ -18,6 +18,19 @@ bg = pygame.transform.scale(
 planet = pygame.transform.scale(
                 pygame.image.load("images/planet.png"), (PLANET_SIZE*2,PLANET_SIZE*2))
 
+
+class Spacecraft:
+
+    def __init__(self, x, y, vel_x, vel_y, mass):
+        self.x = x
+        self.y = y
+        self.vel_x = vel_x
+        self.vel_y = vel_y
+        self.mass = mass
+
+    def draw(self):
+        pygame.draw.circle(window, COLORS['RED'], (int(self.x), int(self.y)), SHIP_SIZE)
+
 def main():
     running = True
     clock = pygame.time.Clock()

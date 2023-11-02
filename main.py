@@ -53,6 +53,11 @@ def create_ship(location, mouse):
     obj = Spacecraft(t_x, t_y, vel_x, vel_y, SHIP_MASS)
     return obj
 
+def get_distance(cords1, cords2):
+    x1, y1 = cords1
+    x2, y2 = cords2
+    return math.sqrt((x1-x2)**2 + (y1-y2)**2)
+
 def main():
     running = True
     clock = pygame.time.Clock()
@@ -85,6 +90,8 @@ def main():
             obj.draw()
             obj.move()
             off_screen = any([obj.x < 0, obj.x > WIDTH, obj.y < 0, obj.y > HEIGHT])
+            if get_distance((obj.x, obj.y), (planet.x, planet.y)) < PLANET_SIZE-10:
+                objects.remove(obj)
             if off_screen:
                 objects.remove(obj)
         planet.draw()

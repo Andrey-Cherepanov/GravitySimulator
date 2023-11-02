@@ -84,7 +84,7 @@ def main():
         for obj in objects[:]:
             obj.draw()
             obj.move()
-            off_screen = any(obj.x < 0, obj.x > WIDTH, obj.y < 0, obj.y > HEIGHT)
+            off_screen = any([obj.x < 0, obj.x > WIDTH, obj.y < 0, obj.y > HEIGHT])
             if off_screen:
                 objects.remove(obj)
         planet.draw()

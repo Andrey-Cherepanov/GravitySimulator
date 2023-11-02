@@ -35,6 +35,16 @@ class Spacecraft:
         self.x += self.vel_x
         self.y += self.vel_y
 
+class Planet:
+    def __init__(self, x, y, mass):
+        self.x = x
+        self.y = y
+        self.mass = mass
+
+    def draw(self):
+
+        window.blit(planet_img, (self.x - PLANET_SIZE, self.y - PLANET_SIZE))
+
 def create_ship(location, mouse):
     t_x, t_y = location
     m_x, m_y = mouse
@@ -48,6 +58,7 @@ def main():
     clock = pygame.time.Clock()
     objects = []
     temp_obj_pos = None
+    planet = Planet(WIDTH//2, HEIGHT//2, PLANET_MASS)
 
     while running:
         clock.tick(FPS)
@@ -76,6 +87,7 @@ def main():
             off_screen = any(obj.x < 0, obj.x > WIDTH, obj.y < 0, obj.y > HEIGHT)
             if off_screen:
                 objects.remove(obj)
+        planet.draw()
 
         pygame.display.update()
 

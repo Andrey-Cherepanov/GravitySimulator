@@ -20,7 +20,7 @@ planet = pygame.transform.scale(
 
 def main():
     running = True
-    clock = pygame.time.clock()
+    clock = pygame.time.Clock()
 
     while running:
         clock.tick(FPS)

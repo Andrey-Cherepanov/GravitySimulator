@@ -28,6 +28,11 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
+        window.blit(bg, (0,0))
+        window.blit(planet, (WIDTH//2 - PLANET_SIZE, HEIGHT//2 - PLANET_SIZE))
+        pygame.display.update()
+
     pygame.quit()
 
 if __name__ == '__main__':

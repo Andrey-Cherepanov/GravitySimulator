@@ -13,9 +13,9 @@ pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Gravity simulator")
 
-bg = pygame.transform.scale(
+bg_img = pygame.transform.scale(
                 pygame.image.load("images/space.png"), (WIDTH, HEIGHT))
-planet = pygame.transform.scale(
+planet_img = pygame.transform.scale(
                 pygame.image.load("images/planet.png"), (PLANET_SIZE*2,PLANET_SIZE*2))
 
 
@@ -65,8 +65,7 @@ def main():
                     temp_obj_pos = None
 
 
-        window.blit(bg, (0,0))
-        window.blit(planet, (WIDTH//2 - PLANET_SIZE, HEIGHT//2 - PLANET_SIZE))
+        window.blit(bg_img, (0,0))
         if temp_obj_pos:
             pygame.draw.line(window, COLORS['WHITE'], temp_obj_pos, mouse_pos, 2)
             pygame.draw.circle(window, COLORS['RED'], temp_obj_pos, SHIP_SIZE)
@@ -77,7 +76,7 @@ def main():
             off_screen = any(obj.x < 0, obj.x > WIDTH, obj.y < 0, obj.y > HEIGHT)
             if off_screen:
                 objects.remove(obj)
-                
+
         pygame.display.update()
 
     pygame.quit()

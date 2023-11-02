@@ -31,6 +31,18 @@ class Spacecraft:
     def draw(self):
         pygame.draw.circle(window, COLORS['RED'], (int(self.x), int(self.y)), SHIP_SIZE)
 
+    def move(self, planet=None):
+        self.x += self.vel_x
+        self.y += self.vel_y
+
+def create_ship(location, mouse):
+    t_x, t_y = location
+    m_x, m_y = mouse
+    vel_x = (m_x - t_x) / VEL_SCALE
+    vel_y = (m_y - t_y) / VEL_SCALE
+    obj = Spacecraft(t_x, t_y, vel_x, vel_y, SHIP_MASS)
+    return obj
+
 def main():
     running = True
     clock = pygame.time.Clock()
@@ -48,8 +60,7 @@ def main():
                 if not temp_obj_pos:
                     temp_obj_pos = mouse_pos
                 else:
-                    t_x, t_y = temp_obj_pos
-                    obj = Spacecraft(t_x, t_y, 0, 0, SHIP_MASS)
+                    obj = create_ship(temp_obj_pos, mouse_pos)
                     objects.append(obj)
                     temp_obj_pos = None
 
@@ -60,8 +71,13 @@ def main():
             pygame.draw.line(window, COLORS['WHITE'], temp_obj_pos, mouse_pos, 2)
             pygame.draw.circle(window, COLORS['RED'], temp_obj_pos, SHIP_SIZE)
 
-        for obj in objects:
+        for obj in objects[:]:
             obj.draw()
+            obj.move()
+            off_screen = any(obj.x < 0, obj.x > WIDTH, obj.y < 0, obj.y > HEIGHT)
+            if off_screen:
+                objects.remove(obj)
+                
         pygame.display.update()
 
     pygame.quit()

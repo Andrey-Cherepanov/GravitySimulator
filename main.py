@@ -3,7 +3,7 @@ import math
 
 WIDTH, HEIGHT = 800, 600
 PLANET_MASS = 100; SHIP_MASS = 5
-G = 5
+G = 10
 PLANET_SIZE = 50; SHIP_SIZE = 5
 FPS = 60
 VEL_SCALE = 100
@@ -32,6 +32,16 @@ class Spacecraft:
         pygame.draw.circle(window, COLORS['RED'], (int(self.x), int(self.y)), SHIP_SIZE)
 
     def move(self, planet=None):
+        distance = get_distance((self.x, self.y), (planet.x, planet.y))
+        a = (G*planet.mass) / distance**2
+        angle = math.atan2(planet.y - self.y, planet.x - self.x)
+
+        acceleration_x = a * math.cos(angle)
+        acceleration_y = a * math.sin(angle)
+
+        self.vel_x += acceleration_x
+        self.vel_y += acceleration_y
+
         self.x += self.vel_x
         self.y += self.vel_y
 
@@ -88,7 +98,7 @@ def main():
 
         for obj in objects[:]:
             obj.draw()
-            obj.move()
+            obj.move(planet=planet)
             off_screen = any([obj.x < 0, obj.x > WIDTH, obj.y < 0, obj.y > HEIGHT])
             if get_distance((obj.x, obj.y), (planet.x, planet.y)) < PLANET_SIZE-10:
                 objects.remove(obj)

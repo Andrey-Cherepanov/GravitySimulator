@@ -1,9 +1,10 @@
 import pygame
 import math
+import random as r
 
 WIDTH, HEIGHT = 800, 600
 PLANET_MASS = 100; SHIP_MASS = 5
-G = 10
+G = 6
 PLANET_SIZE = 50; SHIP_SIZE = 5
 FPS = 60
 VEL_SCALE = 100
@@ -27,9 +28,12 @@ class Spacecraft:
         self.vel_x = vel_x
         self.vel_y = vel_y
         self.mass = mass
+        self.tail = []
 
     def draw(self):
         pygame.draw.circle(window, COLORS['RED'], (int(self.x), int(self.y)), SHIP_SIZE)
+        for i, el in enumerate(self.tail[:-3]):
+            pygame.draw.circle(window, COLORS['WHITE'], el, SHIP_SIZE*(i+1)//15)
 
     def move(self, planet=None):
         distance = get_distance((self.x, self.y), (planet.x, planet.y))
@@ -41,6 +45,10 @@ class Spacecraft:
 
         self.vel_x += acceleration_x
         self.vel_y += acceleration_y
+    def move(self, planets=[]):
+        self.tail.append((int(self.x), int(self.y)))
+        if len(self.tail) > 15:
+            del self.tail[0]
 
         self.x += self.vel_x
         self.y += self.vel_y

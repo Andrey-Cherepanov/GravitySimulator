@@ -35,20 +35,20 @@ class Spacecraft:
         for i, el in enumerate(self.tail[:-3]):
             pygame.draw.circle(window, COLORS['WHITE'], el, SHIP_SIZE*(i+1)//15)
 
-    def move(self, planet=None):
-        distance = get_distance((self.x, self.y), (planet.x, planet.y))
-        a = (G*planet.mass) / distance**2
-        angle = math.atan2(planet.y - self.y, planet.x - self.x)
-
-        acceleration_x = a * math.cos(angle)
-        acceleration_y = a * math.sin(angle)
-
-        self.vel_x += acceleration_x
-        self.vel_y += acceleration_y
     def move(self, planets=[]):
         self.tail.append((int(self.x), int(self.y)))
         if len(self.tail) > 15:
             del self.tail[0]
+        for planet in planets:
+            distance = get_distance((self.x, self.y), (planet.x, planet.y))
+            a = (G*planet.mass) / distance**2
+            angle = math.atan2(planet.y - self.y, planet.x - self.x)
+
+            acceleration_x = a * math.cos(angle)
+            acceleration_y = a * math.sin(angle)
+
+            self.vel_x += acceleration_x
+            self.vel_y += acceleration_y
 
         self.x += self.vel_x
         self.y += self.vel_y
@@ -81,7 +81,9 @@ def main():
     clock = pygame.time.Clock()
     objects = []
     temp_obj_pos = None
-    planet = Planet(WIDTH//2, HEIGHT//2, PLANET_MASS)
+    planets = [
+    Planet(WIDTH//2, HEIGHT//2, PLANET_MASS)
+    ]
 
     while running:
         clock.tick(FPS)
@@ -106,13 +108,15 @@ def main():
 
         for obj in objects[:]:
             obj.draw()
-            obj.move(planet=planet)
+            obj.move(planets=planets)
             off_screen = any([obj.x < 0, obj.x > WIDTH, obj.y < 0, obj.y > HEIGHT])
-            if get_distance((obj.x, obj.y), (planet.x, planet.y)) < PLANET_SIZE-10:
-                objects.remove(obj)
+            for planet in planets:
+                if get_distance((obj.x, obj.y), (planet.x, planet.y)) < PLANET_SIZE:
+                    objects.remove(obj)
             if off_screen:
                 objects.remove(obj)
-        planet.draw()
+        for planet in planets:
+            planet.draw()
 
         pygame.display.update()
 
